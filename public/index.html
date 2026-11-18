@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lumen — Analytics for teams that ship</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --card: #ffffff;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --brand: #3b66f6;
+        --brand-2: #0ea5e9;
+        --ring: rgba(59, 102, 246, 0.35);
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { height: 100%; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(1200px 600px at 80% -10%, #e8eeff 0%, transparent 60%),
+          radial-gradient(1000px 500px at -10% 10%, #e6f7ff 0%, transparent 55%),
+          #f7f9fc;
+        min-height: 100%;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ── Feature-flagged announcement bar ───────────────────────────── */
+      .promo {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 0 20px;
+        height: 0;
+        overflow: hidden;
+        color: #fff;
+        background: linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%);
+        font-weight: 600;
+        letter-spacing: 0.1px;
+        opacity: 0;
+        transform: translateY(-12px);
+        transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.45s ease, transform 0.45s ease;
+      }
+      .promo.show {
+        height: 52px;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .promo .pill {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        background: rgba(255, 255, 255, 0.22);
+        padding: 3px 9px;
+        border-radius: 999px;
+      }
+      .promo a {
+        color: #fff;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        white-space: nowrap;
+      }
+
+      /* ── Nav ────────────────────────────────────────────────────────── */
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 22px 24px;
+      }
+      .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; }
+      .logo {
+        width: 30px; height: 30px; border-radius: 9px;
+        background: linear-gradient(135deg, var(--brand), var(--brand-2));
+        box-shadow: 0 6px 18px var(--ring);
+      }
+      .navlinks { display: flex; gap: 26px; color: var(--muted); font-weight: 500; font-size: 15px; }
+      .navlinks span:hover { color: var(--ink); cursor: pointer; }
+      .nav-cta {
+        background: var(--ink); color: #fff; border: 0; padding: 10px 18px;
+        border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer;
+      }
+
+      /* ── Hero ───────────────────────────────────────────────────────── */
+      .hero { max-width: 820px; margin: 60px auto 0; padding: 0 24px; text-align: center; }
+      .eyebrow {
+        display: inline-block; color: var(--brand); font-weight: 700; font-size: 13px;
+        text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 18px;
+      }
+      h1 { font-size: clamp(38px, 6vw, 60px); line-height: 1.05; letter-spacing: -0.02em; text-wrap: balance; }
+      h1 .grad {
+        background: linear-gradient(90deg, var(--brand), var(--brand-2));
+        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      }
+      .sub { margin: 22px auto 0; max-width: 560px; color: var(--muted); font-size: 19px; line-height: 1.6; }
+      .cta-row { display: flex; gap: 14px; justify-content: center; margin-top: 34px; }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--brand), var(--brand-2)); color: #fff; border: 0;
+        padding: 14px 26px; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer;
+        box-shadow: 0 10px 26px var(--ring);
+      }
+      .btn-ghost {
+        background: #fff; color: var(--ink); border: 1px solid #e2e8f0;
+        padding: 14px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer;
+      }
+      .mock {
+        max-width: 900px; margin: 56px auto 80px; padding: 0 24px;
+      }
+      .window {
+        border-radius: 16px; overflow: hidden; border: 1px solid #e6ebf3;
+        box-shadow: 0 30px 80px rgba(15, 23, 42, 0.12); background: #fff;
+      }
+      .window .bar { display: flex; gap: 7px; padding: 13px 16px; border-bottom: 1px solid #eef2f7; }
+      .window .bar i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+      .window .bar i:nth-child(1) { background: #ff5f57; }
+      .window .bar i:nth-child(2) { background: #febc2e; }
+      .window .bar i:nth-child(3) { background: #28c840; }
+      .window .body { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 26px; }
+      .stat { background: #f8fafc; border: 1px solid #eef2f7; border-radius: 12px; padding: 18px; }
+      .stat b { display: block; font-size: 26px; letter-spacing: -0.02em; }
+      .stat span { color: var(--muted); font-size: 13px; }
+
+      /* ── Live flag-state chip (for the demo/recording) ──────────────── */
+      .flagchip {
+        position: fixed; right: 20px; bottom: 20px; z-index: 50;
+        display: flex; align-items: center; gap: 10px;
+        background: #0f172a; color: #e2e8f0; font-family: ui-monospace, "SF Mono", Menlo, monospace;
+        font-size: 13px; padding: 11px 15px; border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(2, 6, 23, 0.35);
+      }
+      .flagchip .dot { width: 10px; height: 10px; border-radius: 50%; background: #64748b; transition: background 0.3s; }
+      .flagchip .dot.on { background: #22c55e; box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2); }
+      .flagchip .val { font-weight: 700; }
+      .flagchip .val.on { color: #4ade80; }
+      .flagchip .val.off { color: #94a3b8; }
+    </style>
+  </head>
+  <body>
+    <!-- Feature-flagged announcement bar: shown only when `new-banner` is ON -->
+    <div class="promo" id="promo">
+      <span class="pill">New</span>
+      <span id="announcement"></span>
+      <a href="#">Try it free →</a>
+    </div>
+
+    <nav>
+      <div class="brand"><span class="logo"></span> Lumen</div>
+      <div class="navlinks">
+        <span>Product</span><span>Pricing</span><span>Docs</span><span>Customers</span>
+      </div>
+      <button class="nav-cta">Start free</button>
+    </nav>
+
+    <header class="hero">
+      <span class="eyebrow">Analytics, without the busywork</span>
+      <h1>Ship faster with <span class="grad">insights that keep up</span></h1>
+      <p class="sub">
+        Lumen turns your product data into answers your whole team can act on —
+        no SQL, no waiting on the data team.
+      </p>
+      <div class="cta-row">
+        <button class="btn-primary">Get started</button>
+        <button class="btn-ghost">Book a demo</button>
+      </div>
+    </header>
+
+    <section class="mock">
+      <div class="window">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="body">
+          <div class="stat"><b>128k</b><span>Monthly active users</span></div>
+          <div class="stat"><b>+18.4%</b><span>Week-over-week growth</span></div>
+          <div class="stat"><b>2.3s</b><span>Median time to insight</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live flag state, polled from the server so it mirrors the dashboard -->
+    <div class="flagchip">
+      <span class="dot" id="dot"></span>
+      <span>new-banner =</span>
+      <span class="val off" id="val">OFF</span>
+    </div>
+
+    <script>
+      const promo = document.getElementById("promo");
+      const dot = document.getElementById("dot");
+      const val = document.getElementById("val");
+      let last = null;
+
+      async function poll() {
+        try {
+          const res = await fetch("/api/banner", { cache: "no-store" });
+          const { showBanner, announcement } = await res.json();
+          if (showBanner !== last) {
+            last = showBanner;
+            if (announcement) document.getElementById("announcement").textContent = announcement;
+            promo.classList.toggle("show", showBanner);
+            dot.classList.toggle("on", showBanner);
+            val.textContent = showBanner ? "ON" : "OFF";
+            val.className = "val " + (showBanner ? "on" : "off");
+          }
+        } catch (_) {
+          /* server not ready yet — keep polling */
+        }
+      }
+
+      poll();
+      setInterval(poll, 1000);
+    </script>
+  </body>
+</html>

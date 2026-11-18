@@ -1,0 +1,28 @@
+name: Remove dead feature flags
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Print the diffs without opening pull requests'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: canopy-labs/featureflip-flag-cleanup-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          api-token: ${{ secrets.FEATUREFLIP_API_TOKEN }}
+          org: canopy-labs
+          project: nodejs-demo
+          staleness: dead
+          dry-run: ${{ inputs.dry-run }}
