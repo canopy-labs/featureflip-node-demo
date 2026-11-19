@@ -20,6 +20,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           mode: archive-sweep
-          api-token: ${{ secrets.FEATUREFLIP_ARCHIVE_TOKEN }}
+          api-token: ${{ secrets.FEATUREFLIP_API_TOKEN }}
           org: canopy-labs
           project: nodejs-demo
