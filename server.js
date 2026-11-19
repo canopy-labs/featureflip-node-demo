@@ -41,14 +41,7 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
 // The page polls this endpoint. The server decides whether the announcement
 // bar shows and what it says, so changing it never needs a page edit.
 app.get("/api/banner", (req, res) => {
-  if (client.boolVariation("new-banner", { user_id: "user-123" }, false)) {
-    res.json({
-      showBanner: true,
-      announcement: "Lumen AI Insights is here — auto-summarize any dashboard in one click.",
-    });
-  } else {
-    res.json({ showBanner: false });
-  }
+  res.json({ showBanner: false });
 });
 
 const server = app.listen(PORT, () => {
