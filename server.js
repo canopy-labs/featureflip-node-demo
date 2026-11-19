@@ -38,9 +38,8 @@ client ??= { boolVariation: (_key, _ctx, def) => def, close: async () => {} };
 const app = express();
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
-// Evaluate the flag on each request. This is a synchronous, in-memory read —
-// there is no network call on the hot path. The server owns the announcement,
-// so turning the flag on is the whole release: no page edit, no redeploy.
+// The page polls this endpoint. The server decides whether the announcement
+// bar shows and what it says, so changing it never needs a page edit.
 app.get("/api/banner", (req, res) => {
   if (client.boolVariation("new-banner", { user_id: "user-123" }, false)) {
     res.json({
