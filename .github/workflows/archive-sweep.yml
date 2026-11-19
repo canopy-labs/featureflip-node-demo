@@ -1,0 +1,25 @@
+name: Archive removed feature flags
+
+# Archives each flag whose removal pull request has merged, once Featureflip
+# stops seeing it evaluated. A flag still in use is reported as [deferred] and
+# retried on the next run.
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  pull-requests: read
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: canopy-labs/featureflip-flag-cleanup-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          mode: archive-sweep
+          api-token: ${{ secrets.FEATUREFLIP_ARCHIVE_TOKEN }}
+          org: canopy-labs
+          project: nodejs-demo
