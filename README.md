@@ -21,8 +21,11 @@ place the SDK is touched — one `boolVariation` call.
 
 - Node.js **20.19.0+** (22+ recommended)
 - A Featureflip account
-- A boolean flag named **`announcement-bar`** created in one environment
-- That environment's **SERVER SDK key** (Dashboard → Environments → SDK keys)
+- A boolean flag named **`announcement-bar`** created in one environment, with
+  that environment's **Default Variation** set to **True** (flag page →
+  Environments tab). A new boolean flag serves `false` even when it's switched
+  on, so without this step flipping it on changes nothing.
+- That environment's **SERVER SDK key** (Dashboard → SDK Keys)
 
 ## Setup
 
@@ -81,12 +84,12 @@ default. Override with `baseUrl` in the `create()` config if you need to.
 
 | Scene | In the app / dashboard |
 |-------|------------------------|
-| 2 — Install | Show `npm install @featureflip/node`; show the `announcement-bar` flag + copy the SDK key |
-| 3 — Code | Show `server.js` (auto-zoom the `boolVariation` line) |
+| 2 — Install | Show `npm install @featureflip/node`; show the `announcement-bar` flag (OFF, default variation True) and the server-side SDK key |
+| 3 — Code | Show `server.js` (highlight the `create` and `boolVariation` lines) |
 | 4 — Run, flag OFF | `npm start`, open localhost:4000 → plain page, chip `OFF` |
 | 5 — **Live flip** | Split screen: toggle `announcement-bar` ON in the dashboard → banner slides in, chip flips to `ON` (no restart) |
-| 6 — Targeting | In the dashboard, switch `announcement-bar` to a 20% rollout / targeting rule |
-| 7 — Recap/CTA | Recap card + `app.featureflip.io/sign-up` |
+| 6 — Rollout | Default variation False, then Add rollout: True to 20% by `user_id`; switch the flag off (kill switch) |
+| 7 — Recap/CTA | Recap card + `app.featureflip.io` |
 
 **Recording tips**
 
